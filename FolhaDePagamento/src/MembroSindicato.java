@@ -5,6 +5,15 @@ public class MembroSindicato {
     private float taxaSindical;
     private Empregado empregado;
 
+    public MembroSindicato(int id, boolean servicoSindicato, float taxaSindical, Empregado empregado) {
+        this.id = id;
+        this.servicoSindicato = servicoSindicato;
+        this.taxaSindical = taxaSindical;
+        this.empregado = empregado;
+    }
+
+    public MembroSindicato() {}
+
     public int getId() {
         return id;
     }

@@ -32,34 +32,34 @@ public class Main {
             Empresa empresa = new Empresa();
             switch (opc) {
                 case 1: // Adicionar empregado
-                    Transacao.novaTransacao(true);
+                    Transacao.novaTransacao();
                     empresa.adicionarEmpregado();
                     break;
                 case 2: // Remover empregado
-                    Transacao.novaTransacao(true);
+                    Transacao.novaTransacao();
                     empresa.removerEmpregado();
                     break;
                 case 3: // Cartão de ponto
-                    Transacao.novaTransacao(true);
+                    Transacao.novaTransacao();
                     CartaoDePonto cartaoDePonto = new CartaoDePonto();
                     cartaoDePonto.lancarCartaoDePonto();
                     break;
                 case 4: // Resultado de venda
-                    Transacao.novaTransacao(true);
+                    Transacao.novaTransacao();
                     Venda venda = new Venda();
                     venda.lancarResultadoDeVenda();
                     break;
                 case 5: // Taxa de serviço
-                    Transacao.novaTransacao(true);
+                    Transacao.novaTransacao();
                     Sindicato sindicato = new Sindicato();
                     sindicato.lancarTaxaDeServico();
                     break;
                 case 6:
-                    Transacao.novaTransacao(true);
+                    Transacao.novaTransacao();
                     empresa.alterarEmpregado();
                     break;
                 case 7: // Rodar folha de pagamento
-                    Transacao.novaTransacao(true);
+                    Transacao.novaTransacao();
                     Empregado empregado = new Empregado();
                     empregado.rodarFolha();
                     break;

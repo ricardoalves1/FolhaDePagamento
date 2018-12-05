@@ -120,18 +120,24 @@ public class Empresa {
                         for (MembroSindicato j : Sindicato.empregado) {
                             if (j.getEmpregado() == i) {
                                 Sindicato.empregado.remove(j);
+                                Sindicato.indice.remove(j.getId());
+                                Collections.sort(Sindicato.indice);
                                 break;
                             }
                         }
                     }
                     indice.remove(numero);
+                    Collections.sort(indice);
 
                     System.out.println("Empregado removido");
+                }
+                else {
+                    Transacao.undo.pop();
                 }
                 return;
             }
         }
-
+        Transacao.undo.pop();
         System.out.println("Não foi encontrado nenhum empregado com esse número");
 
     }
@@ -294,12 +300,15 @@ public class Empresa {
                         }
                         System.out.println("Taxa sindical alterada");
                     }
+                    else {
+                        Transacao.undo.pop();
+                    }
 
                 }
                 return;
             }
         }
-
+        Transacao.undo.pop();
         System.out.println("Nenhum empregado foi encontrado com esse número");
 
     }

@@ -30,11 +30,12 @@ public class CartaoDePonto {
                 }
                 else {
                     System.out.println("Operação inválida");
+                    Transacao.undo.pop();
                     return;
                 }
             }
         }
-
+        Transacao.undo.pop();
         System.out.println("Não foi encontrado empregado com esse número");
 
     }

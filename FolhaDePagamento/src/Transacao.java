@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class Transacao implements Cloneable{
+public class Transacao {
 
     // Empresa
     private ArrayList<Empregado> empregadoEmpresa = new ArrayList<>();
@@ -26,24 +26,12 @@ public class Transacao implements Cloneable{
         this.taxaServico = taxaServico;
     }
 
-    public static void novaTransacao(boolean i) {
-        ArrayList<Empregado> empregadoEmpresa = new ArrayList<>();
-        empregadoEmpresa.addAll(Empresa.empregados);
+    public static void novaTransacao() {
 
-        ArrayList<Integer> indiceEmpresa = new ArrayList<>();
-        indiceEmpresa.addAll(Empresa.indice);
-
-        ArrayList<MembroSindicato> empregadoSindicato = new ArrayList<>();
-        empregadoSindicato.addAll(Sindicato.empregado);
-
-        ArrayList<Integer> indiceSindicato = new ArrayList<>();
-        indiceSindicato.addAll(Sindicato.indice);
-
-        undo.push(new Transacao(empregadoEmpresa, indiceEmpresa, Empresa.dia, Empresa.mes, empregadoSindicato, indiceSindicato, Sindicato.taxaServico));
-
-        while (i && !redo.empty()) {
+        while (!redo.empty()) {
             redo.pop();
         }
+        undoRedo(1);
 
     }
 
@@ -55,15 +43,15 @@ public class Transacao implements Cloneable{
         }
 
         Transacao undo = Transacao.undo.pop();
-        cloneTransacao(2);
+        undoRedo(2);
 
-        Sindicato.empregado = undo.getEmpregadoSindicato();
-        Sindicato.indice = undo.getIndiceSindicato();
-        Sindicato.taxaServico = undo.getTaxaServico();
-        Empresa.empregados = undo.getEmpregadoEmpresa();
-        Empresa.indice = undo.getIndiceEmpresa();
+        Empresa.empregados = (undo.getEmpregadoEmpresa());
+        Sindicato.empregado = (undo.getEmpregadoSindicato());
+        Empresa.indice = (undo.getIndiceEmpresa());
+        Sindicato.indice = (undo.getIndiceEmpresa());
         Empresa.dia = undo.getDia();
         Empresa.mes = undo.getMes();
+        Sindicato.taxaServico = undo.getTaxaServico();
 
     }
 
@@ -75,33 +63,51 @@ public class Transacao implements Cloneable{
         }
 
         Transacao redo = Transacao.redo.pop();
-        cloneTransacao(1);
+        undoRedo(1);
 
-        Empresa.empregados = redo.getEmpregadoEmpresa();
-        Empresa.indice = redo.getIndiceEmpresa();
+        Empresa.empregados = (redo.getEmpregadoEmpresa());
+        Empresa.indice = (redo.getIndiceEmpresa());
         Empresa.dia = redo.getDia();
         Empresa.mes = redo.getMes();
-        Sindicato.empregado = redo.getEmpregadoSindicato();
-        Sindicato.indice = redo.getIndiceEmpresa();
+        Sindicato.empregado = (redo.getEmpregadoSindicato());
+        Sindicato.indice = (redo.getIndiceEmpresa());
         Sindicato.taxaServico = redo.getTaxaServico();
 
     }
 
-    public static void cloneTransacao(int i) {
+    public static void undoRedo(int opc) {
 
         ArrayList<Empregado> empregadoEmpresa = new ArrayList<>();
-        empregadoEmpresa.addAll(Empresa.empregados);
+        for (Empregado i: Empresa.empregados) {
+            Empregado empregado = new Empregado(i.getNumero(), i.getNome(), i.getEndereco(), i.getTipoEmpregado(), i.getSalario(), i.getData(), i.getMetodoPagamento(), i.getSindicato(), i.getPagamento());
+            empregadoEmpresa.add(empregado);
 
+            for (CartaoDePonto j: i.getCartaoDePonto()) {
+                CartaoDePonto cartaoDePonto = new CartaoDePonto(j.getHorasTrabalhadas());
+                empregado.setCartaoDePonto(cartaoDePonto);
+            }
+
+            empregado.setComissao(i.getComissao());
+            for (Venda j: i.getVenda()) {
+                Venda vendas = new Venda(j.getValor(), j.getData());
+                empregado.setVenda(vendas);
+            }
+
+        }
         ArrayList<Integer> indiceEmpresa = new ArrayList<>();
-        indiceEmpresa.addAll(Empresa.indice);
-
+        for (Integer i: Empresa.indice) {
+            indiceEmpresa.add(i);
+        }
         ArrayList<MembroSindicato> empregadoSindicato = new ArrayList<>();
-        empregadoSindicato.addAll(Sindicato.empregado);
-
+        for (MembroSindicato i: Sindicato.empregado) {
+            empregadoSindicato.add(new MembroSindicato(i.getId(), i.getServicoSindicato(), i.getTaxaSindical(), i.getEmpregado()));
+        }
         ArrayList<Integer> indiceSindicato = new ArrayList<>();
-        indiceSindicato.addAll(Sindicato.indice);
+        for (Integer i: Sindicato.indice) {
+            indiceSindicato.add(i);
+        }
 
-        if (i == 1) {
+        if (opc == 1) {
             undo.push(new Transacao(empregadoEmpresa, indiceEmpresa, Empresa.dia, Empresa.mes, empregadoSindicato, indiceSindicato, Sindicato.taxaServico));
         }
         else {
